@@ -1,18 +1,18 @@
 #Selecting HybSeq Genes Using MarkerMiner
 
 
-###Learning Objectives
+### Learning Objectives
 
 * 
 * Run MarkerMiner using a web interface
 * Select single copy genes for HybSeq probe design
 
-##Genomic Resources
+## Genomic Resources
 
-##Obtaining Transcriptomes
+## Obtaining Transcriptomes
 
-##Preparing Genomic Scaffolds
+## Preparing Genomic Scaffolds
 
-##Running MarkerMiner on Cyverse
+## Running MarkerMiner on Cyverse
 
-##Viewing MarkerMiner Output
+## Viewing MarkerMiner Output
