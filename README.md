@@ -47,7 +47,7 @@ Slides (Presenter: Norm Wickett)
 
 Wednesday, 10h - 12h
 
-[Tutorial](Cyverse.md)
+[Tutorial](Atmosphere.md)
 
 ## Designing HybSeq Probes
 
