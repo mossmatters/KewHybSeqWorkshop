@@ -39,47 +39,94 @@ We created a Cyverse Atmosphere image, `HybSeq_Kew_Workshop`, that contains all 
 
 ## HybSeq 101
 
-Slides
+Wednesday, 9h - 10h
+
+Slides (Presenter: Norm Wickett)
+
+## Workshop Setup: Cyverse Atmosphere
+
+Wednesday, 10h - 12h
+
+[Tutorial](Cyverse.md)
 
 ## Designing HybSeq Probes
 
-Slides
+Wednesday, 13h - 15h
+
+Slides (Presenter: Matt Johnson)
 
 [Tutorial](Markerminer.md)
 
+Software Covered: MarkerMiner, BLAST, MAFFT
+
 ## Project Planning and Costs
 
-Slides
+Wednesday, 15:30h - 16:30h
+
+Slides (Presenter: Elliot Gardner)
 
 ## From Tissues to DNA
 
-Slides
+Wednesday, 16:30h - 17:30h 
+
+Slides (Presenter: Elliot Gardner)
 
 ## Library Construction and Pooling Strategies
 
-Slides
+Thursday, 9h - 10h
+
+Slides (Presenter: Elliot Gardner)
 
 ## Processing Reads
 
-Slides
+Thursday, 10h - 12h
+
+Slides (Presenter: Matt Johnson)
 
 [Tutorial](FastQC_Trimmomatic.md)
 
+Software Covered: BaseSpace, FastQC, Trimmomatic
+
 ## From reads to sequences with HybPiper
+
+Thursday, 13h - 15h
+
+Slides (Presenter: Matt Johnson)
 
 [Tutorial](HybPiper.md)
 
-## Module 7: Phylogenomic Analysis
+Software Covered: HybPiper (BWA, SPAdes, Exonerate), RStudio
 
-Slides
+
+## Preparing Data for Phylogenetics
+
+Thursday, 15:30 - 17:30
+
+Slides (Presenter: Matt Johnson)
 
 Tutorial
 
-## Module 8: From HybSeq to SNPs with GATK
+Software Covered: MAFFT, PAL2NAL, Trimal, Aliview, FastTree, FigTree
 
-Slides
+## Phylogenomic Analysis
+
+Friday, 9h - 12h
+
+Slides (Presenter: Norm Wickett)
 
 Tutorial
+
+Software Covered: RAxML, ASTRAL-II, PhyParts
+
+## From HybSeq to SNPs with GATK
+
+Friday, 13h - 15h
+
+Slides (Presenter: Elliot Gardner)
+
+Tutorial
+
+Software Covered: GATK, IGV, PLINK, Structure, SplitsTree, SVDQuartets
 
 ---
 
