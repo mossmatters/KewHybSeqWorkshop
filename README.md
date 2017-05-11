@@ -63,7 +63,7 @@ Slides
 
 Slides
 
-[Tutorial](Processing_HybSeq_Illumina_Reads.md)
+[Tutorial](FastQC_Trimmomatic.md)
 
 ## From reads to sequences with HybPiper
 
