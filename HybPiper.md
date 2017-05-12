@@ -10,8 +10,6 @@ More information and the software package can be accessed at: https://github.com
 
 ## Test Dataset
 
-in the HybPiper package downloaded from the repository, in the `test_dataset` directory:
-
 **`test_reads_fastq.tar.gz`** contains paired reads from nine samples chosen from the initial HybPiper manuscript. It includes six "ingroup" samples (genus *Artocarpus*) and three outgroup samples. Each sample has a pair of `fastq` files, representing the forward and reverse read, generated on an Illumina MiSeq 2x300 platform. **Note**: If you cloned this git repository and do not have the "large file storage" add-on to git, the `test_reads_fastq.tar.gz` file in your repository will **NOT** be a real compressed archive. Please download the reads from the link above! 
 
 **`test_targets.fasta`** is a file containing the full coding sequence from 13 target genes based on the Artocarpus probe set described in the HybPiper manuscript. There are two "sources" of sequence for each target: *Artocarpus* (sequences from a draft genome in the target group) and *Morus* (a reference genome in the same family as *Artocarpus*). For example, both of these sequences represent `gene002`:
@@ -62,8 +60,12 @@ Although HybPiper is set up to run on each sample separately, if the input files
 Here, we will employ a "while loop" to get the names of samples from a file `namelist.txt` and use that name as a variable to access the names of read files and set the `--prefix` flag. From the `test_dataset` directory:
 
 ```
-while read name; 
-do /usr/local/HybPiper/reads_first.py -b test_targets.fa -r $name*.fastq --prefix $name --bwa
+while read name 
+do /usr/local/HybPiper/reads_first.py \
+  -b test_targets.fa \
+  -r $name*.fastq \
+  --prefix $name \
+  --bwa
 done < namelist.txt
 ```
 This should take only a few minutes to run through every sample. The "while loop" syntax and the `namelist.txt` file will also be used for other post-processing scripts later in the tutorial.
@@ -76,7 +78,9 @@ A heatmap is one way to get a quick glance of the overall success of HybPiper in
 
 The first line of `test_seq_lengths.txt` has the names of each gene. The second line has the length of the target gene, averaged over each "source" for that gene. The rest of the lines are the length of the sequence recovered by HybPiper for each gene. If there was no sequence for a gene, a 0 is entered.
 
-To use the heatmap script `gene_recovery_heatmap.R`, open the script in an interactive R session (for example, using RStudio). You will need to install two R packages, `gplots` and `heatmap.plus`. On the sixth line of the script, enter the full path to your `test_seq_lengths.txt` file, and then execute the entire script.
+To use the heatmap script `gene_recovery_heatmap.R`, open the script in an interactive R session in the VCN Viewer. RStudio is located in the Programming section of the Applications menu. 
+
+First, install two R packages, `gplots` and `heatmap.plus`. On the sixth line of the script, enter the full path to your `test_seq_lengths.txt` file, and then execute the entire script.
 
 This should plot a heatmap representing HybPiper's success at recovering genes at each locus, across all the samples. 
 
@@ -129,34 +133,105 @@ If you ran `intronerate.py` on these samples, you can also specify "supercontig"
 
 The script will output unaligned FASTA files, one per gene, to the current directory.
 
-## Introns and Paralogs
+## Introns 
 
-We have prepared more in-depth discussions about [extracting introns](Introns) or [diagnosing putative paralogs](Paralogs) on separate pages.
+One of the attractive features of HybSeq is the ability to target relatively conserved regions of the genome (exons) while also capturing more variable flanking regions (introns). In order to extract exon sequences, HybPiper arranges assembled contigs into a "supercontig" that contains exons and flanking intron sequences. The supercontigs are saved in the HybPiper output file and can be extracted using the script `intronerate.py`.
 
-## Cleaning up
+![](images/supercontig.png)
 
-Optional utilities after running the pipeline for multiple assemblies: 
 
-**NOTE**: for these utilities to work, the files must be in the same directory hierarchy created by the pipeline. (i.e. `species/sequences/FAA/` and `species/sequences/FNA/`)
+Given a completed run of `reads_first.py` for a sample, run the script `intronerate.py` to generate "gene" sequences for each locus. The script will generate two new sequence files for each gene:
 
-###`cleanup.py`
+**supercontig**: A sequence containing all assembled contigs with a unique alignment to the reference protein, concatenated into one sequence.
 
-HybPiper generates a lot of output files. Most of these can be discarded after the run. This script handles deleting unnecessary files, and can reduce the size of the directory created by HybPiper by 75%.
+**introns**: The supercontig with the exon sequences removed.
 
-#### Example Command Line
+	python /usr/local/HybPiper/interonerate.py --prefix hybseq_directory
+	
+Specify the name of a directory generated by ```reads_first.py``` in the prefix argument.
+
+The default behavior is to refer to the file `genes_with_seqs.txt` to recover full length sequences only for the genes where exons were previously recovered. You may optionally supply a file containing a list of genes with `--genelist filename`
+
+**NOTE**: The script will extract all sequence *NOT* annotated as exons by exonerate. This may be introns (or intergenic sequence), but it may also be mis-assembled contigs. While it may be difficult ot tell whether the sequence is "real" from a single sample, I recommend running `intronerate.py` on several samples. Then, extract the supercontig sequences with `retrieve_sequences.py` and align them. Sequences that appear in only one sample are probably from mis-assembled contigs and may be trimmed, for example using Trimal.
+
+
+We have prepared more in-depth discussions about [extracting introns](Introns.md) or [diagnosing putative paralogs](Paralogs.md) on separate pages.
+
+
+
+## Assessing Paralogs
+
+When running the main script, you may notice occasional warnings about paralogs. These warnings are triggered when HybPiper detects multiple contigs containing long coding sequences-- by default at least 85% of the reference sequence. HybPiper will choose among these competing long contigs by first checking whether one of the contigs has coverage depth that greatly exceeds the others (10x by default). If all competing long contigs have similar depth, the sequence with the greatest percent identity to the reference is chosen.
+
+These criteria may not be ideal in all cases, especially in the event of gene (or genome) duplication. Choosing the appropriate gene copy to use for phylogenetics requires careful consideration, and HybPiper flags the genes that may require further attention. Note that there may be other reasons for multple long-length contigs: recent polyploidy, contamination, or even allelic variation may result in multiple reads.
+
+HybPiper includes a post-processing script, `paralog_investigator.py` to extract coding sequences from alternative contigs. To run it on the test data, use the `namelist.txt` file and a while loop:
 
 ```
-python /usr/local/HybPiper/cleanup.py EG30
+while read i
+do
+echo $i
+python ../paralog_investigator.py $i
+done < namelist.txt
 ```
 
-By default the script will delete all the files generated by Spades. Other options may be added in the future.
+The script will report the number of paralogs found for each gene. If many samples have more than one copy for many genes, it may indicate an ancient gene duplication. If one sample tends to have many copies, it may indicate it is a polyploid.
 
-## Excerise
+Paralog coding sequences are extracted into a file located at: `prefix/gene/prefix/paralogs/gene_paralogs.fasta`
 
-## Questions
+Not all samples have paralog warnings, such as EG30. Some genes do not have any paralogs found, such as gene001. However, HybPiper recovered coding sequence from two contigs in the sample EG98 for gene002:
 
+```
+>EG98.0 NODE_4_length_1358_cov_56.9293_ID_43,Artocarpus-gene002,17,282,89.27,(-),1358,572
+>EG98.main NODE_3_length_1380_cov_111.618_ID_41,Artocarpus-gene002,0,282,91.49,(+),17,869
+```
+
+The `main` refers to the paralog that was chosen during the initial run of HybPiper. The original names of the contigs from SPAdes is also shown. The `main` contig had about twice as much depth of coverage as the other paralog (111x vs 57x), and also had a higher percent identity (91.49% vs 87.27%).
+
+Are these two sequences paralogs or alleles? The best way to check is to use multiple samples and build gene trees from the sequences. HybPiper includes the script `paralog_retriever.py` for this task. `paralog_retriever.py` will collect all paralogs from each sample in `namelist.txt`, along with all coding sequences from samples without paralogs, and output them to "standard output." If you have a list of genes for which you want to assess paralogs, you can use GNU Parallel:
+
+`parallel "python paralog_retriever.py namelist.txt {} > {}.paralogs.fasta" ::: gene002 gene006 gene030`
+
+The output to the screen should look like this:
+
+```
+gene030	1	6	4	1	5	1	4	4	4
+gene006	1	2	2	1	2	1	2	2	2
+gene002	1	2	2	1	2	1	2	2	2
+```
+This shows the number of paralogs for each gene. The columns are in the same order as `namelist.txt`.
+
+The unaligned FASTA files generated by `paralog_retriever.py` can be used in a phylogenetics pipeline to align and reconstruct a phylogeny. If you have `mafft` and `FastTree` installed, you can create the tree directly from `paralog_retriever.py` using pipes:
+
+`python ../paralog_retriever.py namelist.txt gene074 | mafft --auto - | FastTree -nt -gtr > gene074.paralogs.tre`
+
+![](images/gene074.paralogs.png)
+
+From the tree above (plotted using FigTree), you can see that for each species, the two sequences recovered form a clade. This means there is no evidence of an ancient duplication event for this gene. There may be another explanation for why HybPiper commonly found two competing sequences, such as alleles. For phylogenetics, choosing the `main` sequence for each species is sufficient. 
+
+Other genes have more complicated histories: 
+
+`python ../paralog_retriever.py namelist.txt gene002 | mafft --auto - | FastTree -nt -gtr > gene002.paralogs.tre`
+
+![](images/gene002.paralogs.png)
+
+We see that there are two distinct clades of sequences, sister to a clade of the outgroups (NZ874, EG30, and NZ281). The `main` sequences form one clade, meaning that this gene had an ancestral duplication within the outgroup. 
+
+Cases like the one above were common in the *Artocarpus* data on which the test dataset is based. By investigating each gene tree, it is possible to delineate which sequence is appropraite for phylogenetics. However, some samples may be missing one or both copies of the duplicated gene. Although the genes may really be lost, it is also possible that HybPiper was not able to recover both copies. 
+
+To test this possibility, one option is to create a new target file for HybPiper that includes examples of both copies. HybPiper will map reads against each copy separately, treating them as separate loci. For the *Artocarpus* dataset, this allowed us to nearly double the number of "loci" for phylogenetics! 
+
+
+## Exercise
+
+* Run `reads_first.py` and `intronerate.py` on each sample the test dataset.
+* Open a gene in Aliview using the VNC Viewer and align the sequences (Align menu --> Realign Everything). Aliview uses MUSCLE as its default alignment program.
+* Compare the FNA alignment to the supercontig alignment. How does the addition of intron regions affect the sequence alignment?
+* Run `paralog_invesitgator.py` to identify genes in the test dataset that may have paralogous copies. For one such gene, run `paralog_retriever.py` and generate a gene tree. How will the paralog pattern of this gene affect phylogenetic inference?
 
 ## Further Reading
+
+Weitemier, K., Straub, S. C. K., Cronn, R. C., Fishbein, M., Schmickl, R., McDonnell, A., & Liston, A. (2014). Hyb-Seq: Combining Target Enrichment and Genome Skimming for Plant Phylogenomics. Applications in Plant Sciences, 2(9), 1400042. doi:10.3732/apps.1400042 (http://www.bioone.org/doi/10.3732/apps.1400042)
 
 Johnson M.G., E.M. Gardner, Y. Liu, R. Medina, B. Goffinet, A.J. Shaw, N.J.C. Zerega, & N.J. Wickett. 2016. HybPiper: Extracting Coding Sequence and Introns for Phylogenetics from High-Throughput Sequencing Reads Using Target Enrichment. APPS 4(7):1600016. (http://www.bioone.org/doi/abs/10.3732/apps.1600016)
 
