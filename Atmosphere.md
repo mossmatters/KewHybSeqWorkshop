@@ -67,4 +67,5 @@ If you wish to transfer your own files to and from your instance, the easiest wa
 
 Download and install Cyberduck and start a new SFTP connection with your Cyverse username, password, and instance IP address. 
 
+You can edit files directly on your Atmosphere instance from your computer via Cyberduck. You can specify your preferred text editor in Cyberduck's preferences.
 
