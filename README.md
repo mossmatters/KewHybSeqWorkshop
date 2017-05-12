@@ -130,4 +130,30 @@ Software Covered: GATK, IGV, PLINK, Structure, SplitsTree, SVDQuartets
 
 ---
 
+## Funding
+
+The organizers thank the Kew Royal Botanical Gardens for sponsoring the workshop. This workshop was funded under the Plant and Fungal Tree of Life Project (PAFTOL, William Baker, lead PI). 
+
+Active research presented in this workshop on HybSeq and Phylogenomics, including all of the tutorial data sets, was funded by the National Science Foundation:
+
+#### Pleurocarpous Moss Tree of Life
+DEB-1239980 (A. Jonathan Shaw), DEB-12400045 (Bernard Goffinet), and DEB-1239992 (Norman Wickett)
+
+#### Phylogeny of *Artocarpus* (Moraceae)
+
+DEB-0919119 (Nyree J.C. Zerega), DEB-1501373 (Elliot Gardner)
+
+#### Rapid radiation of Funariaceae
+
+DEB-1146295 (Bernard Goffinet)
+
+#### Diversification of Diatoms
+
+DEB-1353131 (Andrew Alverson), DEB-1353152 (Norman Wickett)
+
+#### Dimensions: Landscapes of Linalool in Onagraceae 
+
+DEB-1342873 (Krissa Skogen, Norman Wickett, Jeremie Fant)
+
 ![](http://www.cyverse.org/sites/default/files/PoweredbyCyverse_LogoSquare_0_0.png) 
+![](https://www.nsf.gov/images/logos/nsf1sm.gif)
