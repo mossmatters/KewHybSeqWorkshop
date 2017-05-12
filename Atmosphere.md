@@ -11,18 +11,27 @@
 
 Login to https://atmo.cyverse.org
 
-The instance will take approximately 15 minutes to be fully active.
+From the Atmosphere dashboard, click on Projects in the blue menu bar. On the Projects page, click the `CREAET NEW PROJECT` button. Give a name and description to your project and click `CREATE`.
+
+Once the project appears in the list, click on it to go to the Project page. From here, click the `NEW` button and select `Instance`. In the search options, select "Show all" and search for `HybPiper_Kew_Workshop`. Select the instance to view the resource allocation screen. Here is the information 
+
+* **Base Image Version**: 1.0
+* **Project**: YourProjectName
+* **Provider**: Kew HybSeq Workshop 
+* **Instance Size**: medium1 (CPU: 4, Mem: 8G, Disk: 80 GB)
+
+**NOTE:** If the Kew HybSeq Workshop does not appear, select iPlant Cloud - Tuscon instead. 
+
+Press the blue `LAUNCH INSTANCE` button. The instance will take up to 15 minutes to be fully active.
 
 
 ## Logging into the Instance
 
-Click on the instance in your Dashboard and verify that it is currently active. 
+In the Atmosphere dashboard, navigate to Projects and select the project you created. Click on the Instance and verify that it is active. On the instance screen, under IP Address, click "copy" to copy the IP address to your clipboard.
 
-Under IP Address, click "copy" to copy the IP address to your clipboard.
+#### MACOSX and Linux
 
-#### MACOSX
-
-Open the Terminal application, which is located in the Utilities folder inside Applications.
+Open the Terminal application. On MACOSX it is located in the Utilities folder inside Applications.
 
 Enter the command:
 
@@ -46,6 +55,17 @@ More information about using PuTTY can be found here: https://mediatemple.net/co
 
 ## Access to Workshop Data
 
+*TODO: CREATE PUBLIC LINK FOR DATA TARBALL*
+
+Download the workshop data to your computer with `wget`:
+
+```
+wget https://link/to/workshop.data.tar.gz
+tar -zxf workshop.data.tar.gz
+```
+
+
+
 ## GUI Access via VNC
 
 The Atmosphere instance also has GUI access, which we will use to access programs with a graphical interface. You can access the server through the Web Desktop by clicking the link on the right column of instance page. However, this interface is slow, and we recommend access through a standalone program. 
@@ -58,7 +78,7 @@ Once you have connected, you should see a screen like this:
 
 <img src=images/vnc_desktop.png width="500">
 
-You can now access your instance as if it were any other graphical operating system. Several phylogenetics programs have been installed; check "Other" in the Applications menu.
+You can now access your instance as if it were any other graphical operating system. Several phylogenetics programs have been installed; view the installed programs in "Other" within the Applications menu.
 
 
 ## SFTP Access via Cyberduck

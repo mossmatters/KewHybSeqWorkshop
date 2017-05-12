@@ -2,7 +2,8 @@
 
 ## Learning Objectives
 
-1.	Construct a target file for HybPiper.2.	Run HybPiper for multiple samples and evaluate enrichment efficiency and target recovery efficiency.3.	Extract intron sequences and identify putative paralogous copies.4.	Prepare multiple sequence alignments for phylogenetic analysis.
+1.	Construct a target file for HybPiper.2.	Run HybPiper for multiple samples and evaluate enrichment efficiency and target recovery efficiency.3.	Extract intron sequences and compare to exon-only sequences. 
+4. Identify putative paralogous gene copies and whether they will interfere with phylogenetic analysis.
 
 More information and the software package can be accessed at: https://github.com/mossmatters/HybPiper
 
@@ -10,7 +11,7 @@ More information and the software package can be accessed at: https://github.com
 
 ## Test Dataset
 
-**`test_reads_fastq.tar.gz`** contains paired reads from nine samples chosen from the initial HybPiper manuscript. It includes six "ingroup" samples (genus *Artocarpus*) and three outgroup samples. Each sample has a pair of `fastq` files, representing the forward and reverse read, generated on an Illumina MiSeq 2x300 platform. **Note**: If you cloned this git repository and do not have the "large file storage" add-on to git, the `test_reads_fastq.tar.gz` file in your repository will **NOT** be a real compressed archive. Please download the reads from the link above! 
+**`reads`** contains paired reads from nine samples chosen from the initial HybPiper manuscript. It includes six "ingroup" samples (genus *Artocarpus*) and three outgroup samples. Each sample has a pair of `fastq` files, representing the forward and reverse read, generated on an Illumina MiSeq 2x300 platform.  
 
 **`test_targets.fasta`** is a file containing the full coding sequence from 13 target genes based on the Artocarpus probe set described in the HybPiper manuscript. There are two "sources" of sequence for each target: *Artocarpus* (sequences from a draft genome in the target group) and *Morus* (a reference genome in the same family as *Artocarpus*). For example, both of these sequences represent `gene002`:
 
@@ -29,7 +30,6 @@ Having multiple sources for each gene increases the likelihood that reads will m
 
 All of the commands in the bash script will be covered in more detail in the following sections.
 
-**`test_reads`** A directory containing 18 FASTQ files, two for each sample. The sample data is a subset of data used in the HybPiper paper, from *Artocarpus* (Moraceae).
 
 
 ## Running HybPiper
@@ -52,7 +52,6 @@ HybPiper will generate coding sequences and translated proteins from the sequenc
 
 Briefly, if two contigs have non-overlapping alignments to the reference, they are combined into a "supercontig" and Exonerate is run again, for more accurate detection of intron boundaries. If two contigs have similar alignment to the target sequence, the contig with the longer alignment is chosen. If two contigs have identical alignment positions, but one contig has a much greater depth of coverage (10x more by default), it is chosen. If they both have similar depth, the contig with the greater percent identity to the target is chosen.
 
----
 ## Running Multiple Samples
 
 Although HybPiper is set up to run on each sample separately, if the input files are organized and named appropriately, it is easy to set up and run HybPiper on multiple samples consecutively.
