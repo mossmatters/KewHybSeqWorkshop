@@ -104,7 +104,7 @@ Thursday, 15:30 - 17:30
 
 Slides (Presenter: Matt Johnson)
 
-Tutorial
+[Tutorial](Alignment.md)
 
 Software Covered: MAFFT, PAL2NAL, Trimal, Aliview, FastTree, FigTree
 
