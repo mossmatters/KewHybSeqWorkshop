@@ -51,15 +51,15 @@ For comparison, also create a file with uncollapsed gene trees:
 
 ### ASTRAL-II
 
-**On the Atmosphere instance, ASTRAL is located here: `/usr/local/ASTRAL/Astral/astral-4.10.12.jar`**
+**On the Atmosphere instance, ASTRAL is located here: `/usr/local/ASTRAL/Astral/astral.4.10.12.jar`**
 
-You can view the options for ASTRAL with: `java -jar /usr/local/ASTRAL/Astral/astral-4.10.12.jar -h`
+You can view the options for ASTRAL with: `java -jar /usr/local/ASTRAL/Astral/astral.4.10.12.jar -h`
 
 Run ASTRAL using the collapsed gene trees and the uncollapsed RAxML gene trees.
 
-`java -jar /usr/local/ASTRAL/Astral/astral.4.10.2.jar -i collapsed_genetrees.tre -o astral.collapsed.lpp.tre`
+`java -jar /usr/local/ASTRAL/Astral/astral.4.10.12.jar -i collapsed_genetrees.tre -o astral.collapsed.lpp.tre`
 
-`java -jar /usr/local/ASTRAL/Astral/astral.4.10.2.jar -i raxml_genetrees.tre -o astral.raxml.lpp.tre`
+`java -jar /usr/local/ASTRAL/Astral/astral.4.10.12.jar -i raxml_genetrees.tre -o astral.raxml.lpp.tre`
 
 Open and view the ASTRAL trees using FigTree from the VCN Viewer. The support values are the Local Posterior Probability. 
 
@@ -67,20 +67,47 @@ Open and view the ASTRAL trees using FigTree from the VCN Viewer. The support va
 
 ### STRAW
 
-Species TRee Analysis Web Server http://bioinformatics.publichealth.uga.edu/SpeciesTreeAnalysis/
+The Species TRee Analysis Web Server (http://bioinformatics.publichealth.uga.edu/SpeciesTreeAnalysis/) is an online tool for running three summary coalescent methods: STAR, MP-EST, and NJst. 
+
+Two of the STRAW methods (STAR and MP-EST) require rooted gene trees. We will root the gene trees using a script that automatically identifies the common ancestor of outgroup taxa.
+
+First, make a directory for the rooted gene trees:
+
+`mkdir rooted`
+
+`parallel "python ~/path/to/workshop_data/reroot_trees.py collapsed/RAxML_collapsed.{}.tre > rerooted/RAxML_collapsed.rerooted.{}.tre" :::: genelist.txt`
+
+
+Save the combined gene tree file onto your computer and open the STRAW website in your internet browser. Select one of the three analyses and enter the information requested to start the job. You will receive an e-mail when the job is finished, after which you can access the output files, including the species trees.
+
 
 ### Questions
 
-Are there major topological differences between ASTRAL and MP-EST?
+Are there major topological differences between ASTRAL and the STRAW methods?
 How do the topologies differ between the collapsed and uncollapsed gene trees? 
 How do the support values differ?
-
-
-
 
 ## Assessing Support
 
 ### Local Posterior Probability and Multilocus Bootstrap
+
+The support values that ASTRAL outputs by default is the Local Posterior Probability (LPP). This support measure derives from how ASTRAL breaks the species tree into quartets-- unrooted species trees with four tips. Each quartet can have three possible arrangements. The LPP represents the probability of the quartet in the ASTRAL tree, compared to the other two alternatives. It is important to note that the probability is "local", and will not account for long-distance rearrangements of the tree. For example, if a species is in Clade A in 50% of gene trees and in Clade B in another 50% of gene trees, it likely will not affect the probability of monophyly of either Clade A or Clade B.
+
+An alternative method of support, the Multi-Locus Bootstrap (MLBS), incorporates uncertainty in gene tree estimation. In addition to maximum likelihood gene trees, you also supply a set of single-gene bootstrap trees (or posterior trees from a Bayesian analysis) for each gene. ASTRAL calculates a maximum-quartet tree by sampling one tree from this file for each gene. ASTRAL will calculate the maximum quartet tree from the maximum likelihood gene trees as before, and the support from the bootstrap trees will be mapped onto the ASTRAL tree.  
+
+To run MLBS, create a file where each line is the path to the bootstrap trees for the genes. It is important to have the same order as the collapsed gene trees in the section above:
+
+`ls bootstrap/* > bootstrap_filenames.txt`
+
+```
+java -jar /usr/local/ASTRAL/Astral/astral.4.10.12.jar \
+-i raxml_genetrees.tre \
+-o astral.raxml.mlbs.tre \
+-b bootstrap_filenames.txt
+```
+
+This takes some time, so the ASTRAL MLBS tree can be found in the Phylogenomics directory in the workshop data. Open this tree using FigTree in the VCN Viewer. How does the MLBS compare to the LPP?
+
 
 ### PhypartsPieCharts
 
