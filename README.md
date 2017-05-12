@@ -114,7 +114,7 @@ Friday, 9h - 12h
 
 Slides (Presenter: Norm Wickett)
 
-Tutorial
+[Tutorial](Phylogenomics.md)
 
 Software Covered: RAxML, ASTRAL-II, PhyParts
 

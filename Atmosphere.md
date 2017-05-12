@@ -1,5 +1,7 @@
 # Getting Started With Atmosphere 
 
+![](http://www.cyverse.org/sites/default/files/PoweredbyCyverse_LogoSquare_0_0.png)
+
 ## Creating a Cyverse Atmosphere Account
 
 1. Go to https://user.cyverse.org and register as a new user.
