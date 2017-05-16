@@ -132,7 +132,7 @@ Software Covered: GATK, IGV, PLINK, Structure, SplitsTree, SVDQuartets
 
 ## Funding
 
-The organizers thank the Kew Royal Botanical Gardens for sponsoring the workshop. This workshop was funded under the Plant and Fungal Tree of Life Project (PAFTOL, William Baker, lead PI). 
+The organizers thank the Kew Royal Botanical Gardens for sponsoring the workshop. This workshop was funded under the Plant and Fungal Tree of Life Project (PAFTOL, William Baker, lead PI). PAFTOL is supported by the Calleva Foundation, the Sackler Foundation, and the Garfield Weston Foundation. [Learn more about PAFTOL here](http://www.kew.org/science/who-we-are-and-what-we-do/strategic-outputs-2020/plant-and-fungal-trees-life).
 
 Active research presented in this workshop on HybSeq and Phylogenomics, including all of the tutorial data sets, was funded by the National Science Foundation:
 
@@ -156,4 +156,5 @@ DEB-1353131 (Andrew Alverson), DEB-1353152 (Norman Wickett)
 DEB-1342873 (Krissa Skogen, Norman Wickett, Jeremie Fant)
 
 ![](http://www.cyverse.org/sites/default/files/PoweredbyCyverse_LogoSquare_0_0.png) 
-![](https://www.nsf.gov/images/logos/nsf1sm.gif)
+<img src=https://www.nsf.gov/images/logos/nsf1sm.gif width=100>
+<img src=http://www.kew.org/sites/all/themes/kew/images/kew-footer-logo.svg width=200>
