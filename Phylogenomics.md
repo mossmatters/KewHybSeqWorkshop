@@ -109,7 +109,97 @@ java -jar /usr/local/ASTRAL/Astral/astral.4.10.12.jar \
 This takes some time, so the ASTRAL MLBS tree can be found in the Phylogenomics directory in the workshop data. Open this tree using FigTree in the VCN Viewer. How does the MLBS compare to the LPP?
 
 
-### PhypartsPieCharts
+### Phyparts
+
+As phylogenomic methods become more widely adopted across many groups of organisms, a trend is emerging: support values in phylogenomic analysis may be misleading. Bootstrap support will not show the level of discordance present in the gene trees. Consider the following cases for a node receiving maximal ASTRAL support:
+
+* The clade is also supported by gene trees from 235 of 333 loci.
+* The clade is supported by 50 loci, and an additional 45 loci have an alternative arrangement.
+* The clade is supported by just 10 loci, but the other loci do not have a common alternative pattern.
+
+How would your interpretation of this clade change based on this information?
+
+One method for assessing the level of discordance among loci is bipartition analysis. Stephen Smith and colleagues wrote a java package to conduct this analysis called phyparts (). Typically, bipartition analysis is conducted with trees that all share the same taxa (i.e. bootstrap or posterior trees). Phyparts is able to conduct bipartition analysis with a non-overlapping set of taxa across gene trees. 
+
+**Phyparts is located at: `/usr/local/phyparts/target/phyparts-0.0.1-SNAPSHOT-jar-with-dependencies.jar`**
+
+Phyparts requires rooted gene trees and a rooted species tree. We will use the rooted gene trees from the STRAW section above. Re-root the ASTRAL species tree with the same python script:
+
+`python ~/path/to/workshop_data/reroot_trees.py astral.collapsed.lpp.tre > astral.collapsed.lpp.rerooted.tre`
+
+Run Phyparts, using the directory of rerooted gene trees:
+
+```
+java -jar \
+/usr/local/phyparts/target/phyparts-0.0.1-SNAPSHOT-jar-with-dependencies.jar \
+-d rerooted \
+-m astral.collapsed.lpp.rerooted.tre \
+-a 1 \
+-v \
+-o phyparts33 \
+```
+
+This will take a few minutes, and output a lot of files to the current directory. For each node on the phylogeny:
+
+* `phyparts33.concord.node.XX`
+* `phyparts33.conflict.node.XX`
+
+These are text files containing the names of genes that are either concordant or in conflict with the species tree.
+
+* `phyparts33.concon.tre`
+
+A tree file containing the species tree with four different branch labels:
+
+- The number of concordant genes
+- The number of conflicting genes
+- Internode Conflict Analysis score
+- Internode Conflict Analysis score (adjusted)
+
+* `phyparts33.hist`
+A file listing each node on the phylogeny and the number of gene trees that have concordant and conflicting bipartitions.
+
+* `phyparts33.hist.alts`
+
+A list of every alternative bipartition found for every node.
+
+* `phyparts33.node.key`
+
+A file that translates nodes on the species tree into a node number used internally by Phyparts.
+
+#### Phyparts PieCharts
+
+The `phyparts33.concon.tre` output by Phyparts does not tell the whole story of the conflict among the gene trees. In their paper describing Phyparts, Smith et al. use pie charts on the phylogeny to summarize conflict:
+
+<img src="https://static-content.springer.com/image/art%3A10.1186%2Fs12862-015-0423-0/MediaObjects/12862_2015_423_Fig2_HTML.gif" alt="smith_pies">
+
+Each pie chart has four colors:
+
+* Blue: Concordant gene trees
+* Green: Most common conflicting bipartition
+* Red: Other conflicting bipartitions
+* Gray: Gene trees with no information (missing or unresolved)
+
+For each node it is easy to tell at a glance whether there is a lot of intergenic conflict, and whether there is one dominant minority bipartition.
+
+The script `phypartspiecharts.py` will use Phyparts output to plot the piecharts on a given species tree, and save it as a `.svg` image. **The script must be run from the Terminal inside the VNC Viewer**
+
+The three required arguments for the script are:
+
+* The name of the species tree
+* The prefix of the phyparts output files
+* The number of genes in the phyparts analysis.
+
+To run the script:
+
+`python /path/to/workshop_files/phypartspiecharts.py astral.collapsed.lpp.tre phyparts33 258`
+
+This will generate a file `out.svg` which you can view using `eog` in the VNC Viewer Terminal:
+
+`eog out.svg`
+
+#### Exercise
+
+Our run of Phyparts used the collapsed You can also run phyparts with the collapsed gene trees, meaning it is summarizing gene tree bipartitions with at least 33% bootstrap support. How would it be different if only *strongly* supported branches were included in the phyparts analysis? **Repeat the phyparts  analysis using the `-s` flag to increase the support level (e.g. `-s 0.7`).** Be sure to use a different name for the `-o` flag as well. How do the results compare to the initial phyparts analysis?
 
 ## Further Reading
 

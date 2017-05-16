@@ -57,12 +57,10 @@ Sed uses the `'s/find/replace/g'` syntax, so here we are replacing all asterisks
 
 MAFFT (http://mafft.cbrc.jp/alignment/software/) has become one of the most widely used methods for multiple sequence alignments, known for both speed and accuracy. Several recent additions have also made it desirable for adding sequences to existing alignments and for aligning very large (e.g. 100,000 sequences x 5,000 sites, or 20 sequences x 1,000,000 sites) datasets.
 
-Some basic options for running MAFFT can be seen by executing: `mafft -h`:
+Some basic options for running MAFFT can be seen by executing: `mafft --help`:
 
 ```
 (hybpiper) username@127.0.0.1$ mafft -h
-
-/usr/local/bin/mafft: Cannot open -h.
 
 ------------------------------------------------------------------------------
   MAFFT v7.221 (2014/04/16)
@@ -96,13 +94,16 @@ Additional flags for MAFFT can be found on their website: http://mafft.cbrc.jp/a
 
 In our experience, the default settings for MAFFT will inappropriately align short sequences. This can usually be resolved by using the `--localpair` flag to conduct more careful initial alignments, and increasing the `--maxiterate` to allow for more fine-tuning.
 
-`parallel "mafft --localpair --maxiterate 1000 --preservecase {}.FAA > {}.aligned.FAA" :::: genenames.txt`
+`mkdir aligned`
+`parallel "mafft --localpair --maxiterate 1000 /path/to/workshop_files/{}.FAA > aligned/{}.aligned.FAA" :::: genenames.txt`
 
 ## In-Frame Nucleotide Alignment
 
 pal2Nal.pl (http://www.bork.embl.de/pal2nal/) is a Perl script that takes a protein alignment and a set of corresponding nucleotide files and returns an in-frame nucleotide alignment. It is very fast, but also very unforgiving of mismatches between the nucleotide and amino acid alignments. 
 
-`parallel "pal2nal.pl -output fasta {}.aligned.FAA {}.FNA > {}.inframe.FNA" :::: genenames.txt`
+`mkdir inframe`
+
+`parallel "pal2nal.pl -output fasta aligned/{}.aligned.FAA {}.FNA > inframe/{}.inframe.FNA" :::: genenames.txt`
 
 #### Questions
 
@@ -115,14 +116,58 @@ Using the VCN Viewer, open the nucleotide and peptide alignments.
 
 ## Trimming Alignments
 
-`parallel "trimal -gt 0.5 -in {}.inframe.FNA -out {}.trimmed.FNA" :::: genenames.txt `
+`mkdir trimmed`
+
+`parallel "trimal -gt 0.5 -in {}.inframe.FNA -out trimmed/{}.trimmed.FNA" :::: genenames.txt `
 
 Although TrimAl has a method for creating in-frame alignments `--backtrans`, we prefer to use Pal2Nal because it will always result in trimmed alignments that preserve the 3-to-1 ratio of sites.
 
 
 ## Identifying Poorly Aligned Sequences
 
+Phylogenetic inference relies on accurate sequence alignment. A few misaligned sequences in a few genes may influence the entire analysis, but manual verification of alignments of hundreds of genes is impractical. Some misaligned sequences can be identified by looking for long branches on gene trees. In this section we will use ETE3 to identify long branches automatically. The scripts included in this section will generate gene tree images that can be quickly scanned for outliers.
+
 #### FastTree
 
+FastTree (http://www.microbesonline.org/fasttree/) is a tree inference program that uses approximate pseudo-likelihood to calculate the phylogeny. Standard substition models, including GTR for nucleotides, are included. FastTree can handle hundreds of taxa for thousands of sites (even entire bacterial genomes).
+
+To see the full options for FastTree:
+
+`FastTree -h`
+
+To run FastTree in parallel on the nucleotide sequences:
+
+`mkdir fasttree`
+`parallel FastTree -gtr trimmed/{}.trimmed.FNA > fasttree/{}.fasttree.tre" :::: ../genenames.txt`
+
 #### Long branch detection with ETE3
+
+The ETE3 Python Package (https://etetoolkit.org) is a highly customizable phylogenetics framework for processing, manipulating, and visualizing trees. Here we will be using functions in ETE3 for:
+
+* Re-rooting a phylogenetic tree
+* Identifying outlier branch lengths
+* Saving tree images with outlier branches highlighted
+
+There are several options in the script:
+
+`python brlen_outliers.py -h`
+
+By default, the script will flag ingroup branches that are more than 25% of the total tree depth. This threshold is higher (50%) for outgroup branches (which are expected to be longer). A separate threshold may also be set for terminal branches.   
+
+**NOTE** This script can only be run on a computer with a graphical interface. **You can run this script from the Terminal in the VCN Viewer.**
+
+To run the script on all of the tree files:
+
+`mkdir png`
+`parallel python brlen_outliers.py fasttree/{}.fasttree.tre --png png/{}.fasttree.png :::: genelist.txt`
+
+This will generate a PNG file for each gene. The script will also print to the screen the identity of all clades with potential long branches.
+
+To view a PNG file via VNC Viewer, use the command `eog` from the Terminal:
+
+`eog png/geneName.fasttree.png`
+
+Outgroup branches are colored blue, and outlier branches are in red.
+
+For more information about the script, see: http://blog.mossmatters.net/detecting-branch-length-outliers/
 
