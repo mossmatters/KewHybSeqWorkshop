@@ -39,17 +39,23 @@ We created a Cyverse Atmosphere image, `HybSeq_Kew_Workshop`, that contains all 
 
 ## HybSeq 101
 
+An introduction to enriching high-throughput sequencing libraries for targeted exons and flanking introns via hybridization (HybSeq).
+
 Wednesday, 9h - 10h
 
 Slides (Presenter: Norm Wickett)
 
 ## Workshop Setup: Cyverse Atmosphere
 
+Gaining access to computational and data resources for Hands On Tutorials.
+
 Wednesday, 10h - 12h
 
 [Tutorial](Atmosphere.md)
 
 ## Designing HybSeq Probes
+
+Best practices for selecting loci for HybSeq using existing genomic and transcriptomic resources.
 
 Wednesday, 13h - 15h
 
@@ -61,9 +67,14 @@ Software Covered: MarkerMiner, BLAST, MAFFT
 
 ## Project Planning and Costs
 
+Strategies for HybSeq projects: using existing resources, utilizing herbarium material, and planning a budget.
+
 Wednesday, 15:30h - 16:30h
 
 Slides (Presenter: Elliot Gardner)
+
+[Case Studies](Case_Studies.md)
+
 
 ## From Tissues to DNA
 
@@ -73,11 +84,15 @@ Slides (Presenter: Elliot Gardner)
 
 ## Library Construction and Pooling Strategies
 
+Getting the most out of reagents: library preparation, cleaning with SPRI beads, and simultaneous hybridization. 
+
 Thursday, 9h - 10h
 
 Slides (Presenter: Elliot Gardner)
 
 ## Processing Reads
+
+So you've got 60 billion base pairs of sequence: now what? Filtering and trimming HybSeq sequences before analysis.
 
 Thursday, 10h - 12h
 
@@ -88,6 +103,8 @@ Slides (Presenter: Matt Johnson)
 Software Covered: BaseSpace, FastQC, Trimmomatic
 
 ## From reads to sequences with HybPiper
+
+Exploring the three stages of HybPiper (read sorting, contig assembly, and intron extraction) along with strategies for recovering introns and identifying paralogs.
 
 Thursday, 13h - 15h
 
@@ -100,6 +117,8 @@ Software Covered: HybPiper (BWA, SPAdes, Exonerate), RStudio
 
 ## Preparing Data for Phylogenetics
 
+How to avoid staring at every alignment: high-throughput methods for alignment and quality control.
+
 Thursday, 15:30 - 17:30
 
 Slides (Presenter: Matt Johnson)
@@ -110,6 +129,8 @@ Software Covered: MAFFT, PAL2NAL, Trimal, Aliview, FastTree, FigTree
 
 ## Phylogenomic Analysis
 
+From gene trees to species trees: advantages of summary coalescent methods, and new ways of assessing phylogenetic support.
+
 Friday, 9h - 12h
 
 Slides (Presenter: Norm Wickett)
@@ -119,6 +140,8 @@ Slides (Presenter: Norm Wickett)
 Software Covered: RAxML, ASTRAL-II, PhyParts
 
 ## From HybSeq to SNPs with GATK
+
+Strategies for HybSeq in species complexes: marker selection, identifying heterozygosity, and population genomics.
 
 Friday, 13h - 15h
 
