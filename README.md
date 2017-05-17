@@ -59,7 +59,7 @@ Best practices for selecting loci for HybSeq using existing genomic and transcri
 
 Wednesday, 13h - 15h
 
-Slides (Presenter: Matt Johnson)
+[Slides](Slides/designing_hybseq_probes.pdf) (Presenter: Matt Johnson)
 
 [Tutorial](Markerminer.md)
 
@@ -71,7 +71,7 @@ Strategies for HybSeq projects: using existing resources, utilizing herbarium ma
 
 Wednesday, 15:30h - 16:30h
 
-[Slides](planning_hybseq_project_1.pdf) (Presenter: Elliot Gardner)
+[Slides](Slides/planning_hybseq_project_1.pdf) (Presenter: Elliot Gardner)
 
 [Case Studies](Case_Studies.md)
 
@@ -80,7 +80,7 @@ Wednesday, 15:30h - 16:30h
 
 Wednesday, 16:30h - 17:30h 
 
-[Slides](planning_hybseq_project_2.pdf) (Presenter: Elliot Gardner)
+[Slides](Slides/planning_hybseq_project_2.pdf) (Presenter: Elliot Gardner)
 
 [Exercise](DNA_extraction.md)
 
