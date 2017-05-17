@@ -71,7 +71,7 @@ Strategies for HybSeq projects: using existing resources, utilizing herbarium ma
 
 Wednesday, 15:30h - 16:30h
 
-Slides (Presenter: Elliot Gardner)
+[Slides](planning_hybseq_project_1.pdf) (Presenter: Elliot Gardner)
 
 [Case Studies](Case_Studies.md)
 
@@ -80,7 +80,9 @@ Slides (Presenter: Elliot Gardner)
 
 Wednesday, 16:30h - 17:30h 
 
-Slides (Presenter: Elliot Gardner)
+[Slides](planning_hybseq_project_2.pdf) (Presenter: Elliot Gardner)
+
+[Exercise](DNA_extraction.md)
 
 ## Library Construction and Pooling Strategies
 
