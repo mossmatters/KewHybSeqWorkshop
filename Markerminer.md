@@ -70,7 +70,7 @@ Next, count the number of lines in the single copy gene list:
 
 Finally, what percentage of those genes are **strictly** single copy?
 
-`grep "Strictly" Alyrata/singleCopy_AL.txt`
+`grep "Strictly" Alyrata/singleCopy_AL.txt | wc -l`
 
 Compare the results of _A. lyrata_ to one of the other reference proteomes.
 

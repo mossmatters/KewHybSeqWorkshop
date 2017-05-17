@@ -55,18 +55,6 @@ The first time you connect, PuTTY will ask you to verify the identify of the ser
 More information about using PuTTY can be found here: https://mediatemple.net/community/products/dv/204404604/using-ssh-in-putty-
 
 
-## Access to Workshop Data
-
-*TODO: CREATE PUBLIC LINK FOR DATA TARBALL*
-
-Download the workshop data to your computer with `wget`:
-
-```
-wget https://link/to/workshop.data.tar.gz
-tar -zxf workshop.data.tar.gz
-```
-
-
 
 ## GUI Access via VNC
 
