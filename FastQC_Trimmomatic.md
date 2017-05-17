@@ -6,17 +6,31 @@
 
 ## Illumina BaseSpace
 
-*NEED SOME IMAGES FROM ELLIOT*
+Some clue about the effectiveness of a sequencing run can be assessed from BaseSpace, the web-based service provided by Illumina: https://basespace.illumina.com
 
-https://basespace.illumina.com
+One common issue arises with the MiSeq 2x300 bp paired-end sequences, where the reverse read has much less quality than the forward read:
+
+![](images/badread2.png)
+
+Sequencing quality generally drops towards the end of reads, but in this case the reverse read (cycles 301-600) is much worse. Note that removing poor quality reverse reads will result in deletion of many forward reads that are just fine-- some methods for adapting to this situation will be discussed below.
 
 ## Demultiplexing
 
 For some sequencing platforms, such as Illumina MiSeq, the reads are returned already demultiplexed. On other platforms it may be advisable to convert the raw Illumina base calls into separate FASTQ files manually. We recommend...
 
+## Example Sequences
+
+Download example sequences for this workshop to your Atmosphere image:
+
+```
+wget blahblah.tar.gz
+tar -zxvf blahblah.tar.gz
+```
+
+
 ## FastQC
 
-FastQC (https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) is a java package for 
+FastQC (https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) is a java package for quickly visualizing a sequencing run.
 
 On the Atmosphere virtual machine, FastQC can be accessed via the Applications menu (under Other). Open FASTQC and navigate to the directory that contains the read files. Open one of the read files and wait for FastQC to process. 
 
@@ -89,13 +103,15 @@ Libraries derived from random priming, including TruSeq Nano, will always show a
 
 #### Per Tile Sequence Quality
 
-*CHECK TO SEE: Does this show up for Illumina Miseq?*
+This heatmap shows deviations from average read quality based on the position in the Illumina flow cell. Each row is a flow cell position ID, and each column is the position in the read. Red colors may indicate some tiles have highly reduced quality, and perhaps all sequences with these identifiers should be removed.
 
 ## Trimmomatic
 
 Trimmomatic (http://www.usadellab.org/cms/?page=trimmomatic) is a java program for trimming high-throughput sequencing reads. In addition to trimming adapters and barcodes, Trimmomatic will trim and filter sequences based on a series of user-supplied thresholds. One of the best features of Trimmomatic is the ability to retain paired-end information after filtering.
 
 On the Atmosphere workshop instance, trimmomatic is located here: 
+
+`/usr/local/java/trimmomatic-0.35.jar`
 
 #### Sample Trimmomatic Command
 
@@ -144,7 +160,12 @@ A full list of possible filter commands is below:
 
 #### Exercise: Trimming HybSeq Reads
 
-*NEED TO GET READ FILES FROM ELLIOT*
+From the command line on the Atmosphere image, navigate to the directory with the example reads. **Construct a command line for trimmomatic and execute it.**
+
+How many forward and reverse reads were removed?
+
+Try a few variations of the command to see how the parameters affect read trimming. How strict is too strict?
+
 
 #### Questions
 

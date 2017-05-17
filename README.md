@@ -88,7 +88,7 @@ Wednesday, 16:30h - 17:30h
 
 Getting the most out of reagents: library preparation, cleaning with SPRI beads, and simultaneous hybridization. 
 
-Thursday, 9h - 10h
+Thursday, 9h - 10:45h
 
 Slides (Presenter: Elliot Gardner)
 
@@ -108,7 +108,8 @@ Software Covered: BaseSpace, FastQC, Trimmomatic
 
 Exploring the three stages of HybPiper (read sorting, contig assembly, and intron extraction) along with strategies for recovering introns and identifying paralogs.
 
-Thursday, 13h - 15h
+Thursday, 12h - 13h (Lecture)
+Thursday, 14h - 15:20h (Hands On)
 
 Slides (Presenter: Matt Johnson)
 
@@ -121,7 +122,7 @@ Software Covered: HybPiper (BWA, SPAdes, Exonerate), RStudio
 
 How to avoid staring at every alignment: high-throughput methods for alignment and quality control.
 
-Thursday, 15:30 - 17:30
+Thursday, 15:40h - 17h
 
 Slides (Presenter: Matt Johnson)
 
@@ -133,7 +134,8 @@ Software Covered: MAFFT, PAL2NAL, Trimal, Aliview, FastTree, FigTree
 
 From gene trees to species trees: advantages of summary coalescent methods, and new ways of assessing phylogenetic support.
 
-Friday, 9h - 12h
+Friday, 9h - 10h (Lecture)
+Friday, 10h - 10:45h, 11h - 11:30h (Hands On)
 
 Slides (Presenter: Norm Wickett)
 
@@ -145,7 +147,8 @@ Software Covered: RAxML, ASTRAL-II, PhyParts
 
 Strategies for HybSeq in species complexes: marker selection, identifying heterozygosity, and population genomics.
 
-Friday, 13h - 15h
+Friday, 11:30h - 13h (Lecture)
+Friday, 14h - 15:20h (Hands On)
 
 Slides (Presenter: Elliot Gardner)
 

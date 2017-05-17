@@ -10,6 +10,21 @@
 We realize a very broad array of phylogenetic tools and philosophies exists. 
 In the interest of keeping things relatively straightforward, this section will focus on issues relating to the generation of phylogenetic trees from HybSeq data. 
 
+## Example Data
+
+This data contains sequences for 169 species of Onagraceae, with a focus on tribe Onagrae (evening primroses). The majority of sequences derive from HybSeq, but some sequences (identifiable by their 1KP taxon code) are from transcriptomes.
+
+The full dataset contains 309 loci, but this subset contains 13 genes, including several loci with poorly recovered gene sequences.
+
+The dataset includes unaligned, aligned, and trimmed data, so that each step of this tutorial may be made without worrying whether the previous steps have completed successfully.
+
+```
+wget http://de.cyverse.org/dl/d/C10745B6-6FA3-4415-B10D-5BF0BC35EC96/phylogenomics_examples.tar.gz
+tar -zxf phylogenomics_examples.tar.gz
+```
+
+
+
 ## GNU Parallel
 
 Each of the operations in this section, including file management, sequence alignment, and building initial gene trees, will have to be executed on multiple genes. In the test dataset there are only 13 genes, but a full HybSeq project likely has many hundreds of genes. How can we process each gene without entering commands manually?
@@ -36,9 +51,19 @@ As the number of iterations gets large, it is sometimes better to indicate the i
 
 ### Exercise
 
-For phylogenomics, it is useful to create two files: one that contains the names of samples (one per line) and one that contains the names of genes (one per line). **Create a file containing the names of genes in the test dataset using a text editor:** `genenames.txt`
+For phylogenomics, it is useful to create two files: one that contains the names of samples (one per line) and one that contains the names of genes (one per line). 
 
-To practice constructing and using GNU Parallel commands, **try to rename all of the nucleotide files** created by `retrieve_sequences.py` to have a `.fasta` extension rather than a `.FNA` extension.
+Create a new directory that is separate from the one you downloaded, and copy the gene list into that new directory.
+
+
+ ```
+ cd
+ mkdir phylogenomics_test
+ cd phylogenomics_test
+ cp ~/phylogenomics_examples/genelist_phylogenomics genenames.txt
+ ```
+
+To practice constructing and using GNU Parallel commands, **use GNU parallel to copy the unaligned nucleotide and peptide files** into a new subdirectories within `~/phylogenomics_examples`
 
 
 ## Peptide Sequence Alignment
@@ -51,7 +76,7 @@ MAFFT will replace all stop-codon asterisks (*) in the peptide alignment with ga
 
 Sed uses the `'s/find/replace/g'` syntax, so here we are replacing all asterisks with X. The `-i` flag indicates that the files are to be edited *in place* rather than output to a new file. To run this on all files, use GNU Parallel:
 
-`parallel sed -i 's/*/X/g' {}.FAA :::: genenames.txt`
+`parallel sed -i 's/*/X/g' {}.FAA :::: ../genenames.txt`
 
 #### MAFFT
 
@@ -95,7 +120,7 @@ Additional flags for MAFFT can be found on their website: http://mafft.cbrc.jp/a
 In our experience, the default settings for MAFFT will inappropriately align short sequences. This can usually be resolved by using the `--localpair` flag to conduct more careful initial alignments, and increasing the `--maxiterate` to allow for more fine-tuning.
 
 `mkdir aligned`
-`parallel "mafft --localpair --maxiterate 1000 /path/to/workshop_files/{}.FAA > aligned/{}.aligned.FAA" :::: genenames.txt`
+`parallel "mafft --localpair --maxiterate 1000 FAA/{}.FAA > aligned/{}.aligned.FAA" :::: genenames.txt`
 
 ## In-Frame Nucleotide Alignment
 
