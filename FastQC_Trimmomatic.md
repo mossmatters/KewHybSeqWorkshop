@@ -23,8 +23,9 @@ For some sequencing platforms, such as Illumina MiSeq, the reads are returned al
 Download example sequences for this workshop to your Atmosphere image:
 
 ```
-wget blahblah.tar.gz
-tar -zxvf blahblah.tar.gz
+cd
+wget http://de.cyverse.org/dl/d/C4416643-CA5C-4CDD-9FB0-86520AB61059/example_reads.tar.gz
+tar -zxvf example_reads.tar.gz
 ```
 
 
