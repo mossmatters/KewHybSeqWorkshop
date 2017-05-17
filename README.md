@@ -59,7 +59,7 @@ Best practices for selecting loci for HybSeq using existing genomic and transcri
 
 Wednesday, 13h - 15h
 
-[Slides](Slides/designing_hybseq_probes.pdf) (Presenter: Matt Johnson)
+[Slides](Slides/designing_hybseq_probekit.pdf) (Presenter: Matt Johnson)
 
 [Tutorial](Markerminer.md)
 
