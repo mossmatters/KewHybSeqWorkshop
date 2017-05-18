@@ -101,7 +101,7 @@ So you've got 60 billion base pairs of sequence: now what? Filtering and trimmin
 
 Thursday, 12h - 13h
 
-Slides (Presenter: Matt Johnson)
+[Slides](Slides/reads_to_phylogenies_with_hybpiper.pdf) (Presenter: Matt Johnson)
 
 [Tutorial](FastQC_Trimmomatic.md)
 
@@ -113,7 +113,7 @@ Exploring the three stages of HybPiper (read sorting, contig assembly, and intro
 
 Thursday, 14h - 15:20h (Hands On)
 
-Slides (Presenter: Matt Johnson)
+[Slides](Slides/reads_to_phylogenies_with_hybpiper.pdf) (Presenter: Matt Johnson)
 
 [Tutorial](HybPiper.md)
 
