@@ -135,12 +135,12 @@ unzip Trimmomatic-0.36.zip
 
 On the Atmosphere workshop instance, trimmomatic is located here: 
 
-`~/Trimmomatic-0.36/trimmomatic-0.35.jar`
+`~/Trimmomatic-0.36/trimmomatic-0.36.jar`
 
 #### Sample Trimmomatic Command
 
 ```
-java -jar ~/Trimmomatic-0.36/trimmomatic-0.35.jar \
+java -jar ~/Trimmomatic-0.36/trimmomatic-0.36.jar \
 PE -phred33 \
 input_forward.fq.gz \
 input_reverse.fq.gz \
