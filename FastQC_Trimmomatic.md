@@ -33,7 +33,21 @@ tar -zxvf example_reads.tar.gz
 
 FastQC (https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) is a java package for quickly visualizing a sequencing run.
 
-On the Atmosphere virtual machine, FastQC can be accessed via the Applications menu (under Other). Open FASTQC and navigate to the directory that contains the read files. Open one of the read files and wait for FastQC to process. 
+### Running FastQC on Atmosphere
+
+Using the VNC Viwer, FastQC can be accessed via the Applications menu (under Other). Open FASTQC and navigate to the directory that contains the read files. Open one of the read files and wait for FastQC to process. 
+
+Alternatively, you may use "X11 Forwarding" to access the graphical interface. To do this you must include the `-Y` option when you `ssh`:
+
+`ssh -Y username@127.0.0.1`
+
+Finally, FastQC may be run with a command line interface:
+
+`/usr/local/FastQC/fastqc EGL240_S14_L001_R1_001.fastq`
+
+This command will generate a compressed directory `.zip` with the output. It includes a `fastqc_report.html` which may be opened with any browser.
+
+If the interactive VNC Viewer is not working, you can copy this file to your own computer via SFTP (for instance using Cyberduck) and open the file using your own internet browser.
 
 #### Basic Statistics
 
