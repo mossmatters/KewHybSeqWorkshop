@@ -89,14 +89,17 @@ Wednesday, 16:30h - 17:30h
 Getting the most out of reagents: library preparation, cleaning with SPRI beads, and simultaneous hybridization. 
 
 Thursday, 9h - 10:45h
+Exercises 11h -12h
 
-Slides (Presenter: Elliot Gardner)
+[Slides](Slides/pooling_strategies.pdf) (Presenter: Elliot Gardner)
+
+[Exercise](Pooling_Strategies.md)
 
 ## Processing Reads
 
 So you've got 60 billion base pairs of sequence: now what? Filtering and trimming HybSeq sequences before analysis.
 
-Thursday, 10h - 12h
+Thursday, 12h - 13h
 
 Slides (Presenter: Matt Johnson)
 
@@ -108,7 +111,6 @@ Software Covered: BaseSpace, FastQC, Trimmomatic
 
 Exploring the three stages of HybPiper (read sorting, contig assembly, and intron extraction) along with strategies for recovering introns and identifying paralogs.
 
-Thursday, 12h - 13h (Lecture)
 Thursday, 14h - 15:20h (Hands On)
 
 Slides (Presenter: Matt Johnson)

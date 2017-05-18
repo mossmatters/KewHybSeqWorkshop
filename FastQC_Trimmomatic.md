@@ -16,7 +16,7 @@ Sequencing quality generally drops towards the end of reads, but in this case th
 
 ## Demultiplexing
 
-For some sequencing platforms, such as Illumina MiSeq, the reads are returned already demultiplexed. On other platforms it may be advisable to convert the raw Illumina base calls into separate FASTQ files manually. We recommend...
+For some sequencing platforms, such as Illumina MiSeq, the reads are returned already demultiplexed. However, this relies on there being no mistakes in your original sample sheet. For more control, we recommend `bcl2fasta` which is [available on the Illumina website](https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html). This will allow you to specify a correct sample sheet, and will return a list of "unidentified indices" to help you identify mistakes. 
 
 ## Example Sequences
 
