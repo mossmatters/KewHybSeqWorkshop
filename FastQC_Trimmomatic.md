@@ -124,14 +124,23 @@ This heatmap shows deviations from average read quality based on the position in
 
 Trimmomatic (http://www.usadellab.org/cms/?page=trimmomatic) is a java program for trimming high-throughput sequencing reads. In addition to trimming adapters and barcodes, Trimmomatic will trim and filter sequences based on a series of user-supplied thresholds. One of the best features of Trimmomatic is the ability to retain paired-end information after filtering.
 
+
+Due to gross negligence by the organizers, Trimmomatic was left off the installed software list. It is easy to download, however:
+
+```
+cd
+wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip
+unzip Trimmomatic-0.36.zip
+```
+
 On the Atmosphere workshop instance, trimmomatic is located here: 
 
-`/usr/local/java/trimmomatic-0.35.jar`
+`~/Trimmomatic-0.36/trimmomatic-0.35.jar`
 
 #### Sample Trimmomatic Command
 
 ```
-java -jar trimmomatic-0.35.jar \
+java -jar ~/Trimmomatic-0.36/trimmomatic-0.35.jar \
 PE -phred33 \
 input_forward.fq.gz \
 input_reverse.fq.gz \
