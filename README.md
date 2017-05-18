@@ -7,7 +7,7 @@ _May 17-19, 2017_
 
 [Norman Wickett](http://faculty.wcas.northwestern.edu/wickett/), Conservation Scientist, Chicago Botanic Garden
 
-[Matt Johnson](www.mossmatters.com), Post-Doctoral Research Associate, Chicago Botanic Garden
+[Matt Johnson](http://www.mossmatters.com), Post-Doctoral Research Associate, Chicago Botanic Garden
 
 [Elliot Gardner](http://www.plantbiology.northwestern.edu/people/graduate-students/elliot-gardner.html), Ph.D. Candidate, Northwestern University
 
