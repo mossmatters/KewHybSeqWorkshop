@@ -49,9 +49,9 @@ The main script of HybPiper is `reads_first.py`. HybPiper needs sequencing reads
 
 HybPiper is run separately for each sample, and generates a directory that contains all of the output files, organized by gene. 
 
-Run this command from the `hybpiper_testhybpiper_test` directory:
+Run this command from the `hybpiper_test` directory:
 
-`/usr/local/HybPiper/reads_first.py -b test_targets.fasta -r test_reads/NZ281_R*_test.fastq --prefix NZ281 --bwa`
+`/usr/local/HybPiper/reads_first.py -b test_targets.fasta -r NZ281_R*_test.fastq --prefix NZ281 --bwa`
 
 Using the wild card (asterisk) saves some typing and instructs HybPiper to use both the R1 (forward) and R2 (reverse) read files. The `--prefix` flag will be the name of the directory genreated by HybPiper, as well as the identifier for all sequences generated. The `--bwa` flag is required when the target file contains nucleotide sequences. 
 
@@ -72,8 +72,8 @@ Here, we will employ a "while loop" to get the names of samples from a file `nam
 ```
 while read name 
 do /usr/local/HybPiper/reads_first.py \
-  -b test_targets.fa \
-  -r $name*.fastq \
+  -b test_targets.fasta \
+  -r "$name"_R*.fastq \
   --prefix $name \
   --bwa
 done < namelist.txt

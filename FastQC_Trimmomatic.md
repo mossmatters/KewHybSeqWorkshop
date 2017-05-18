@@ -155,7 +155,7 @@ SLIDINGWINDOW:4:15 \
 MINLEN:36
 ```
 
-After the java call, the first argument tells Trimmomatic what type of quality scores are in the file. The best way to know whether `-phred33` or `-phred64` should be used is to use the output of FastQC. The files for this tutorial, which came from an Illumina MiSeq 2x300 run, are `-phred64`.
+After the java call, the first argument tells Trimmomatic what type of quality scores are in the file. The best way to know whether `-phred33` or `-phred64` should be used is to use the output of FastQC. The files for this tutorial, which came from an Illumina MiSeq 2x300 run, are `-phred33`.
 
 The next six arguments are input and output file names in a specific order:
 
