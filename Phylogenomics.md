@@ -2,64 +2,48 @@
 
 ## Preparing Gene Trees
 
-In the workshop data folder, the Phylogenomics directory contains the result of a RAxML inference of XXX gene trees for XXX. Each RAxML tree in the `bestTree` directory has a corresponding file in the `bootstrap` directory, which contains 200 bootstrap replicates for that gene.
+In the workshop data folder, the Phylogenomics directory contains the result of a FastTree inference of 100 gene trees for . 
 
-### Collapsing Gene Trees
-
-Many methods have been developed to incorporate the multispecies coalescent into phylogenetic inference. Some methods, such as BEST (which relies on Mr. Bayes) and *BEAST (which relies on BEAST) allow the direct estimate of species trees from alignments. However, these methods are computationally intensive and impractical to run on large datasets containing many hundreds of loci.
-
-Summary coalescent methods are fast methods of estimating species trees from gene trees while remaining consistent under the multi-species coalescent. Because the input to these methods are gene trees, some error is introduced if the gene tree cannot be determined accurately. Summary coalescent methods do not typically account for gene tree support, and will treat a maximally supported clade with the same weight as a poorly supported clade.
-
-In their 2016 paper "Fast Coalescent-Based Computation of Local Branch Support from Quartet Frequencies", Sayaari and Mirarab suggest using gene trees that are not fully resolved. In their paper they use gene trees where branches receiving less than 33% bootstrap support have been collapsed. 
-
-Here, we will use sumtrees.py, part of the Dendropy python package (https://www.dendropy.org/) to read the RAxML best tree and bootstrap replicates to produce a collapsed gene tree.
-
-First, create a directory for the collapsed gene trees: `mkdir collapsed`
+Download the dataset from here:
 
 ```
-parallel sumtrees.py \
---replace bootstrap/RAxML_bootstrap.{}.tre \
--f 0.33 \
--F newick \
---suppress-annotations \
--o collapsed/RAxML_collapsed.{}.tre \
--i newick \
--t bestTree/RAxML_bestTree.{}.tre \
-:::: genelist.txt`
-```
+cd 
+wget http://de.cyverse.org/dl/d/823BCECB-77F8-4311-A869-3BFDDFF50A90/species_tree_analysis.tar.gz
+tar -zxf species_tree_analysis
 
-
-Unfortunately, sumtrees.py also adds some characters that are not desirable and will cause errors when running ASTRAL. To get rid of these characters, enter the `collapsed` directory and run these commands:
-
-```
-parallel "sed -i 's/\[&U\] //g' RAxML_collapsed.{}.tre" :::: ../genelist.txt
-parallel "sed -i \"s/'//g\" RAxML_collapsed.{}.tre" :::: ../genelist.txt
 ```
 
 ### Gene tree file
 
-Combine all of the gene tree files in the `collapsed` directory into one gene tree file:
+Combine all of the gene tree files in the `fasttree` directory into one gene tree file:
+`cd species_tree_analysis`
 
-`cat collapsed/*.tre > collapsed_genetrees.tre` 
-
-For comparison, also create a file with uncollapsed gene trees:
-
-`cat bestTree/*.tre > raxml_genetrees.tre`
-
+`cat fasttree/*.tre > genetrees.tre` 
 
 ## Summary Coalescent Methods
 
 ### ASTRAL-II
 
-**On the Atmosphere instance, ASTRAL is located here: `/usr/local/ASTRAL/Astral/astral.4.10.12.jar`**
+Download Astral by cloning its Github repository and building the software:
 
-You can view the options for ASTRAL with: `java -jar /usr/local/ASTRAL/Astral/astral.4.10.12.jar -h`
+```
+cd
+git clone https://github.com/smirarab/ASTRAL.git
+cd ASTRAL
+bash make.sh
+```
 
-Run ASTRAL using the collapsed gene trees and the uncollapsed RAxML gene trees.
 
-`java -jar /usr/local/ASTRAL/Astral/astral.4.10.12.jar -i collapsed_genetrees.tre -o astral.collapsed.lpp.tre`
+**The file you need to execute ASTRAL is now here: `~/ASTRAL/Astral/astral.4.10.12.jar`**
 
-`java -jar /usr/local/ASTRAL/Astral/astral.4.10.12.jar -i raxml_genetrees.tre -o astral.raxml.lpp.tre`
+You can view the options for ASTRAL with: `java -jar ~/ASTRAL/Astral/astral.4.10.12.jar -h`
+
+Run ASTRAL using the gene trees.
+
+`cd ~/species_tree_analysis`
+
+`java -jar ~/ASTRAL/Astral/astral.4.10.12.jar -i genetrees.tre -o astral.lpp.tre`
+
 
 Open and view the ASTRAL trees using FigTree from the VCN Viewer. The support values are the Local Posterior Probability. 
 
@@ -73,9 +57,14 @@ Two of the STRAW methods (STAR and MP-EST) require rooted gene trees. We will ro
 
 First, make a directory for the rooted gene trees:
 
-`mkdir rooted`
+`mkdir rerooted`
 
-`parallel "python ~/path/to/workshop_data/reroot_trees.py collapsed/RAxML_collapsed.{}.tre > rerooted/RAxML_collapsed.rerooted.{}.tre" :::: genelist.txt`
+`parallel "python reroot_trees.py fasttree/{}.fasttree.tre > rerooted/{}.rerooted.tre" :::: genelist.txt`
+
+One or more of the gene trees may return an error such as `Cannot set myself as outgroup`. This is because the gene tree does not contain any outgroups, and can be ignored for now. Combine all of the re-rooted trees into one file:
+
+
+`cat rerooted/* > rerooted_genetrees.tre`
 
 
 Save the combined gene tree file onto your computer and open the STRAW website in your internet browser. Select one of the three analyses and enter the information requested to start the job. You will receive an e-mail when the job is finished, after which you can access the output files, including the species trees.
@@ -84,32 +73,12 @@ Save the combined gene tree file onto your computer and open the STRAW website i
 ### Questions
 
 Are there major topological differences between ASTRAL and the STRAW methods?
-How do the topologies differ between the collapsed and uncollapsed gene trees? 
+
 How do the support values differ?
 
-## Assessing Support
-
-### Local Posterior Probability and Multilocus Bootstrap
-
-The support values that ASTRAL outputs by default is the Local Posterior Probability (LPP). This support measure derives from how ASTRAL breaks the species tree into quartets-- unrooted species trees with four tips. Each quartet can have three possible arrangements. The LPP represents the probability of the quartet in the ASTRAL tree, compared to the other two alternatives. It is important to note that the probability is "local", and will not account for long-distance rearrangements of the tree. For example, if a species is in Clade A in 50% of gene trees and in Clade B in another 50% of gene trees, it likely will not affect the probability of monophyly of either Clade A or Clade B.
-
-An alternative method of support, the Multi-Locus Bootstrap (MLBS), incorporates uncertainty in gene tree estimation. In addition to maximum likelihood gene trees, you also supply a set of single-gene bootstrap trees (or posterior trees from a Bayesian analysis) for each gene. ASTRAL calculates a maximum-quartet tree by sampling one tree from this file for each gene. ASTRAL will calculate the maximum quartet tree from the maximum likelihood gene trees as before, and the support from the bootstrap trees will be mapped onto the ASTRAL tree.  
-
-To run MLBS, create a file where each line is the path to the bootstrap trees for the genes. It is important to have the same order as the collapsed gene trees in the section above:
-
-`ls bootstrap/* > bootstrap_filenames.txt`
-
-```
-java -jar /usr/local/ASTRAL/Astral/astral.4.10.12.jar \
--i raxml_genetrees.tre \
--o astral.raxml.mlbs.tre \
--b bootstrap_filenames.txt
-```
-
-This takes some time, so the ASTRAL MLBS tree can be found in the Phylogenomics directory in the workshop data. Open this tree using FigTree in the VCN Viewer. How does the MLBS compare to the LPP?
 
 
-### Phyparts
+## Assessing Support With Phyparts
 
 As phylogenomic methods become more widely adopted across many groups of organisms, a trend is emerging: support values in phylogenomic analysis may be misleading. Bootstrap support will not show the level of discordance present in the gene trees. Consider the following cases for a node receiving maximal ASTRAL support:
 
@@ -125,7 +94,9 @@ One method for assessing the level of discordance among loci is bipartition anal
 
 Phyparts requires rooted gene trees and a rooted species tree. We will use the rooted gene trees from the STRAW section above. Re-root the ASTRAL species tree with the same python script:
 
-`python ~/path/to/workshop_data/reroot_trees.py astral.collapsed.lpp.tre > astral.collapsed.lpp.rerooted.tre`
+`cd ~/species_tree_analysis/`
+
+`python reroot_trees.py astral.lpp.tre > astral.lpp.rerooted.tre`
 
 Run Phyparts, using the directory of rerooted gene trees:
 
@@ -133,13 +104,13 @@ Run Phyparts, using the directory of rerooted gene trees:
 java -jar \
 /usr/local/phyparts/target/phyparts-0.0.1-SNAPSHOT-jar-with-dependencies.jar \
 -d rerooted \
--m astral.collapsed.lpp.rerooted.tre \
+-m astral.lpp.rerooted.tre \
 -a 1 \
 -v \
 -o phyparts33 \
 ```
 
-This will take a few minutes, and output a lot of files to the current directory. For each node on the phylogeny:
+This will take a minute, and output a lot of files to the current directory. For each node on the phylogeny:
 
 * `phyparts33.concord.node.XX`
 * `phyparts33.conflict.node.XX`
@@ -191,15 +162,27 @@ The three required arguments for the script are:
 
 To run the script:
 
-`python /path/to/workshop_files/phypartspiecharts.py astral.collapsed.lpp.tre phyparts33 258`
+The workshop organizers forgot to install one python package, so run this first:
 
-This will generate a file `out.svg` which you can view using `eog` in the VNC Viewer Terminal:
+`conda install -y matplotlib`
 
-`eog out.svg`
+`python ~/species_tree_analysis/phypartspiecharts.py astral.lpp.rerooted.tre phyparts33 100`
+
+This will generate a file `pies.svg` which you can view using `eog` in the VNC Viewer Terminal:
+
+`eog pies.svg`
+
+#### Questions
+
+* What portions of the tree have a lot of concordance? 
+
+* Does the conflict seem to be constricted to the tips of the tree?
+
+* Are there any nodes with a significant minority bipartition (green)?
 
 #### Exercise
 
-Our run of Phyparts used the collapsed You can also run phyparts with the collapsed gene trees, meaning it is summarizing gene tree bipartitions with at least 33% bootstrap support. How would it be different if only *strongly* supported branches were included in the phyparts analysis? **Repeat the phyparts  analysis using the `-s` flag to increase the support level (e.g. `-s 0.7`).** Be sure to use a different name for the `-o` flag as well. How do the results compare to the initial phyparts analysis?
+Our run of Phyparts used the collapsed You can also run phyparts with the collapsed gene trees, meaning it is summarizing gene tree bipartitions with at least 33% bootstrap support. How would it be different if only *strongly* supported branches were included in the phyparts analysis? **Repeat the phyparts  analysis using the `-s` flag to increase the support level (e.g. `-s 0.7`).** Be sure to use a different name for the `-o` flag as well. Finally, re-run `phypartspiecharts.py`. How do the results compare to the initial phyparts analysis?
 
 ## Further Reading
 

@@ -27,6 +27,8 @@ tar -zxf phylogenomics_examples.tar.gz
 
 ## GNU Parallel
 
+![](https://www.gnu.org/software/parallel/logo-gray+black300.png)
+
 Each of the operations in this section, including file management, sequence alignment, and building initial gene trees, will have to be executed on multiple genes. In the test dataset there are only 13 genes, but a full HybSeq project likely has many hundreds of genes. How can we process each gene without entering commands manually?
 
 One method is to use a loop to execute commands many times, as we did in the HybPiper tutorial. However, a loop will only execute commands *sequentially*. Many of the tasks in this section will use only one processor, but modern computers typically have several (a MacBook Pro has 8, for example). To use the machine efficiently, we need to execute commands in *parallel*. 
@@ -49,6 +51,64 @@ As the number of iterations gets large, it is sometimes better to indicate the i
 
 ``parallel "program -program_options {} > {}.out" :::: file_names.txt`
 
+NOTE: You will probably see this warning:
+
+```
+Academic tradition requires you to cite works you base your article on.
+When using programs that use GNU Parallel to process data for publication
+please cite:
+
+  O. Tange (2011): GNU Parallel - The Command-Line Power Tool,
+  ;login: The USENIX Magazine, February 2011:42-47.
+
+This helps funding further development; AND IT WON'T COST YOU A CENT.
+If you pay 10000 EUR you should feel free to use GNU Parallel without citing.
+
+To silence the citation notice: run 'parallel --citation'.
+```
+
+As the workshop will likely not be able to cover the 10000 EUR for each attendee, it is better to just agree to citation.
+
+```
+(hybpiper) [username@127.0.0.1 FAA]$ parallel --citation
+Academic tradition requires you to cite works you base your article on.
+When using programs that use GNU Parallel to process data for publication
+please cite:
+
+@article{Tange2011a,
+  title = {GNU Parallel - The Command-Line Power Tool},
+  author = {O. Tange},
+  address = {Frederiksberg, Denmark},
+  journal = {;login: The USENIX Magazine},
+  month = {Feb},
+  number = {1},
+  volume = {36},
+  url = {http://www.gnu.org/s/parallel},
+  year = {2011},
+  pages = {42-47},
+  doi = {10.5281/zenodo.16303}
+}
+
+(Feel free to use \nocite{Tange2011a})
+
+This helps funding further development; AND IT WON'T COST YOU A CENT.
+If you pay 10000 EUR you should feel free to use GNU Parallel without citing.
+
+If you send a copy of your published article to tange@gnu.org, it will be
+mentioned in the release notes of next version of GNU Parallel.
+
+
+
+Type: 'will cite' and press enter.
+> will cite
+
+Thank you for your support. It is much appreciated. The citation
+notice is now silenced.
+
+```
+
+As you become more familiar with GNU Parallel, you may also consider supporting the project by [purchasing a t-shirt](https://gnuparallel.threadless.com/designs/gnu-parallel).
+
 ### Exercise
 
 For phylogenomics, it is useful to create two files: one that contains the names of samples (one per line) and one that contains the names of genes (one per line). 
@@ -63,7 +123,15 @@ Create a new directory that is separate from the one you downloaded, and copy th
  cp ~/phylogenomics_examples/genelist_phylogenomics genenames.txt
  ```
 
-To practice constructing and using GNU Parallel commands, **use GNU parallel to copy the unaligned nucleotide and peptide files** into a new subdirectories within `~/phylogenomics_examples`
+To practice constructing and using GNU Parallel commands, **use GNU parallel to copy the unaligned nucleotide and peptide files** into a new subdirectories within `~/phylogenomics_examples`:
+
+```
+mkdir FAA
+mkdir FNA
+parallel cp ../phylogenomics_examples/FAA/{}.FAA FAA/{}.FAA :::: genenames.txt
+parallel cp ../phylogenomics_examples/FNA/{}.FNA FNA/{}.FNA :::: genenames.txt
+
+```
 
 
 ## Peptide Sequence Alignment
@@ -76,7 +144,11 @@ MAFFT will replace all stop-codon asterisks (*) in the peptide alignment with ga
 
 Sed uses the `'s/find/replace/g'` syntax, so here we are replacing all asterisks with X. The `-i` flag indicates that the files are to be edited *in place* rather than output to a new file. To run this on all files, use GNU Parallel:
 
-`parallel sed -i 's/*/X/g' {}.FAA :::: ../genenames.txt`
+```
+cd FAA
+parallel sed -i 's/*/X/g' {}.FAA :::: ../genenames.txt
+cd ..
+```
 
 #### MAFFT
 
@@ -120,7 +192,9 @@ Additional flags for MAFFT can be found on their website: http://mafft.cbrc.jp/a
 In our experience, the default settings for MAFFT will inappropriately align short sequences. This can usually be resolved by using the `--localpair` flag to conduct more careful initial alignments, and increasing the `--maxiterate` to allow for more fine-tuning.
 
 `mkdir aligned`
-`parallel "mafft --localpair --maxiterate 1000 FAA/{}.FAA > aligned/{}.aligned.FAA" :::: genenames.txt`
+`parallel --eta "mafft --localpair --maxiterate 1000 FAA/{}.FAA > aligned/{}.aligned.FAA" :::: genenames.txt`
+
+The `--eta` option is for GNU Parallel and will estimate how much longer the loop will take to execute.
 
 ## In-Frame Nucleotide Alignment
 
@@ -128,7 +202,7 @@ pal2Nal.pl (http://www.bork.embl.de/pal2nal/) is a Perl script that takes a prot
 
 `mkdir inframe`
 
-`parallel "pal2nal.pl -output fasta aligned/{}.aligned.FAA {}.FNA > inframe/{}.inframe.FNA" :::: genenames.txt`
+`parallel "pal2nal.pl -output fasta aligned/{}.aligned.FAA FNA/{}.FNA > inframe/{}.inframe.FNA" :::: genenames.txt`
 
 #### Questions
 
@@ -143,7 +217,7 @@ Using the VCN Viewer, open the nucleotide and peptide alignments.
 
 `mkdir trimmed`
 
-`parallel "trimal -gt 0.5 -in {}.inframe.FNA -out trimmed/{}.trimmed.FNA" :::: genenames.txt `
+`parallel "trimal -gt 0.5 -in inframe/{}.inframe.FNA -out trimmed/{}.trimmed.FNA" :::: genenames.txt `
 
 Although TrimAl has a method for creating in-frame alignments `--backtrans`, we prefer to use Pal2Nal because it will always result in trimmed alignments that preserve the 3-to-1 ratio of sites.
 
@@ -163,7 +237,7 @@ To see the full options for FastTree:
 To run FastTree in parallel on the nucleotide sequences:
 
 `mkdir fasttree`
-`parallel FastTree -gtr trimmed/{}.trimmed.FNA > fasttree/{}.fasttree.tre" :::: ../genenames.txt`
+`parallel "FastTree -gtr trimmed/{}.trimmed.FNA > fasttree/{}.fasttree.tre" :::: genenames.txt`
 
 #### Long branch detection with ETE3
 
@@ -175,7 +249,7 @@ The ETE3 Python Package (https://etetoolkit.org) is a highly customizable phylog
 
 There are several options in the script:
 
-`python brlen_outliers.py -h`
+`python ~/phylogenomics_examples/brlen_outliers.py -h`
 
 By default, the script will flag ingroup branches that are more than 25% of the total tree depth. This threshold is higher (50%) for outgroup branches (which are expected to be longer). A separate threshold may also be set for terminal branches.   
 
@@ -183,8 +257,11 @@ By default, the script will flag ingroup branches that are more than 25% of the 
 
 To run the script on all of the tree files:
 
+`cd ~/phylogenomics_test/`
+
 `mkdir png`
-`parallel python brlen_outliers.py fasttree/{}.fasttree.tre --png png/{}.fasttree.png :::: genelist.txt`
+
+`parallel python ~/phylogenomics_examples/brlen_outliers.py fasttree/{}.fasttree.tre --png png/{}.fasttree.png :::: genenames.txt`
 
 This will generate a PNG file for each gene. The script will also print to the screen the identity of all clades with potential long branches.
 
