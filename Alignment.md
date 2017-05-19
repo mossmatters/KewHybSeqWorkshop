@@ -49,7 +49,7 @@ The above command will execute three times in parallel:
 
 As the number of iterations gets large, it is sometimes better to indicate the items in a file. This can be done by using four-colons instead:
 
-``parallel "program -program_options {} > {}.out" :::: file_names.txt`
+`parallel "program -program_options {} > {}.out" :::: file_names.txt`
 
 NOTE: You will probably see this warning:
 
@@ -120,7 +120,7 @@ Create a new directory that is separate from the one you downloaded, and copy th
  cd
  mkdir phylogenomics_test
  cd phylogenomics_test
- cp ~/phylogenomics_examples/genelist_phylogenomics genenames.txt
+ cp ~/phylogenomics_examples/genelist_phylogenomics/genenames.txt genenames.txt
  ```
 
 To practice constructing and using GNU Parallel commands, **use GNU parallel to copy the unaligned nucleotide and peptide files** into a new subdirectories within `~/phylogenomics_examples`:
