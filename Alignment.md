@@ -266,7 +266,7 @@ To run the script on all of the tree files:
 
 `mkdir png_bad`
 
-`parallel --tag python ~/phylogenomics_examples/brlen_outliers.py fasttree_badseqs/{}.fasttree.tre --png png_bad/{}.fasttree.png :::: genenames.txt`
+`parallel --tag python ~/phylogenomics_examples/brlen_outliers.py fasttree_badseqs/{}.fasttree.tre --png png_bad/{}.fasttree.png --outgroups ~/phylogenomics_examples/outgroups.txt :::: genenames.txt`
 
 This will generate a PNG file for each gene. The script will also print to the screen the identity of all clades with potential long branches. The `--tag` option of GNU parallel prints the name of the gene that the branches came from.
 
@@ -275,7 +275,7 @@ Repeat this now for	 the cleaned alignments:
 
 `mkdir png_good`
 
-`parallel --tag python ~/phylogenomics_examples/brlen_outliers.py fasttree/{}.fasttree.tre --png png_good/{}.fasttree.png :::: genenames.txt`
+`parallel --tag python ~/phylogenomics_examples/brlen_outliers.py fasttree/{}.fasttree.tre --png png_good/{}.fasttree.png --outgroups ~/phylogenomics_examples/outgroups.txt :::: genenames.txt`
 
 
 To view a PNG file via VNC Viewer, use the command `eog` from the Terminal:
