@@ -130,6 +130,8 @@ Slides (Presenter: Matt Johnson)
 
 [Tutorial](Alignment.md)
 
+[Script for branch length outliers](scripts/brlen_outliers.py)
+
 Software Covered: MAFFT, PAL2NAL, Trimal, Aliview, FastTree, FigTree
 
 ## Phylogenomic Analysis
@@ -143,6 +145,8 @@ Slides (Presenter: Norm Wickett)
 
 [Tutorial](Phylogenomics.md)
 
+[More information about Phyparts Pie Charts](https://github.com/mossmatters/MJPythonNotebooks/blob/master/PhyParts_PieCharts.ipynb)
+
 Software Covered: RAxML, ASTRAL-II, PhyParts
 
 ## From HybSeq to SNPs with GATK
@@ -154,7 +158,7 @@ Friday, 14h - 15:20h (Hands On)
 
 Slides (Presenter: Elliot Gardner)
 
-Tutorial
+[Example variant workflow script](scripts/alignandcall.pl)
 
 Software Covered: GATK, IGV, PLINK, Structure, SplitsTree, SVDQuartets
 
