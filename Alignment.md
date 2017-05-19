@@ -19,7 +19,7 @@ The full dataset contains 309 loci, but this subset contains 13 genes, including
 The dataset includes unaligned, aligned, and trimmed data, so that each step of this tutorial may be made without worrying whether the previous steps have completed successfully.
 
 ```
-wget http://de.cyverse.org/dl/d/C10745B6-6FA3-4415-B10D-5BF0BC35EC96/phylogenomics_examples.tar.gz
+wget http://de.cyverse.org/dl/d/EB365F90-B516-4EAF-B2A7-5605A135EA04/phylogenomics_examples.tar.gz
 tar -zxf phylogenomics_examples.tar.gz
 ```
 
@@ -234,7 +234,12 @@ To see the full options for FastTree:
 
 `FastTree -h`
 
-To run FastTree in parallel on the nucleotide sequences:
+The alignments you have been working with so far have already been cleaned up, so we will compare them to sequences that have not yet been cleaned:
+
+`mkdir fasttree_badseqs`
+`parallel parallel "FastTree -gtr ~/phylogenomics_examples/bad_alignments/{}.badalignment.fasta > fasttree/{}.fasttree.tre" :::: genenames.txt`
+
+To run FastTree in parallel on the cleaned nucleotide sequences:
 
 `mkdir fasttree`
 `parallel "FastTree -gtr trimmed/{}.trimmed.FNA > fasttree/{}.fasttree.tre" :::: genenames.txt`
@@ -259,15 +264,23 @@ To run the script on all of the tree files:
 
 `cd ~/phylogenomics_test/`
 
-`mkdir png`
+`mkdir png_bad`
 
-`parallel python ~/phylogenomics_examples/brlen_outliers.py fasttree/{}.fasttree.tre --png png/{}.fasttree.png :::: genenames.txt`
+`parallel --tag python ~/phylogenomics_examples/brlen_outliers.py fasttree_badseqs/{}.fasttree.tre --png png_bad/{}.fasttree.png :::: genenames.txt`
 
-This will generate a PNG file for each gene. The script will also print to the screen the identity of all clades with potential long branches.
+This will generate a PNG file for each gene. The script will also print to the screen the identity of all clades with potential long branches. The `--tag` option of GNU parallel prints the name of the gene that the branches came from.
+
+
+Repeat this now for	 the cleaned alignments:
+
+`mkdir png_good`
+
+`parallel --tag python ~/phylogenomics_examples/brlen_outliers.py fasttree/{}.fasttree.tre --png png_good/{}.fasttree.png :::: genenames.txt`
+
 
 To view a PNG file via VNC Viewer, use the command `eog` from the Terminal:
 
-`eog png/geneName.fasttree.png`
+`eog png_good/geneName.fasttree.png`
 
 Outgroup branches are colored blue, and outlier branches are in red.
 
